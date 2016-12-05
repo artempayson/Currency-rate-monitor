@@ -10,6 +10,7 @@ namespace Logic
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
