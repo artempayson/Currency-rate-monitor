@@ -15,6 +15,7 @@ namespace Logic.Model
         decimal Average { get; }
         decimal Buy { get; }
         decimal Sell { get; }
-        
+        string FullName { get;}
+        void UpdateValues(decimal average, decimal buy, decimal sell, decimal high, decimal low);
     }
 }

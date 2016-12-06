@@ -22,8 +22,15 @@ namespace Logic
             foreach (var item in b)
             {
                 names.Add(item.ToString().Split('"')[1]);
+                foreach (var tite in item.ToString().Split('"'))
+                {
+                    if(!string.IsNullOrEmpty(tite)) Console.WriteLine(tite);
+                    Console.ReadKey();
+                }
+              
             }
-           
+            
+            Console.WriteLine();
             
             
         }

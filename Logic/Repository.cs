@@ -29,11 +29,11 @@ namespace Logic
                 List<string> names = new List<string>();
                 foreach (var item in b)
                 {
-                    allPairs.Add(
-                        new CurrencyPair(true, item.ToString().Split('"')[1]));
+                    //allPairs.Add(
+                        //new CurrencyPair(true, item.ToString().Split('"')[1]));
                 }
 
-                return allPairs;
+                return null;
 
             }
 
