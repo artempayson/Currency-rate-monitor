@@ -9,8 +9,7 @@ namespace Logic.Model
     interface ICurrencyPair
     {
         string ShortName { get; }
-        string FullName { get; }
-        bool IsEnabled { get; }
+        bool IsEnabled { get;}
         decimal High { get; }
         decimal Low { get; }
         decimal Average { get; }
