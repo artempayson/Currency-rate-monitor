@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Logic.Model.ExistingCurrencies
 {
-    class CurrencyRepository
+   static class CurrencyRepository
     {
-        public List<ICurrencyPair> ExistingCurrenciesList { get; } = new List<ICurrencyPair>()
+       static public List<ICurrencyPair> ExistingCurrenciesList { get; } = new List<ICurrencyPair>()
         {
             new CurrencyPair("btc_usd"),
             new CurrencyPair("btc_rur"),
@@ -30,8 +30,13 @@ namespace Logic.Model.ExistingCurrencies
             new CurrencyPair("dsh_usd"),
             new CurrencyPair("eth_btc"),
             new CurrencyPair("eth_usd"),
+            new CurrencyPair("eth_eur"),
             new CurrencyPair("eth_ltc"),
             new CurrencyPair("eth_rur")
         };
+       static public ICurrencyPair CurrencyPairByName(string name)
+        {
+            return ExistingCurrenciesList.Find(cp => cp.ShortName.Equals(name));
+        }
     }
 }

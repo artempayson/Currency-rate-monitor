@@ -12,7 +12,6 @@ namespace Logic.Model.ExistingCurrencies
 
 
     class CurrencyPair : ICurrencyPair
-
     {
         private Dictionary<string, string> existingCurrencyNames = new Dictionary<string, string>
         {
@@ -34,9 +33,14 @@ namespace Logic.Model.ExistingCurrencies
         public CurrencyPair(string shortName)
         {
             ShortName = shortName;
-            FullName = existingCurrencyNames[shortName.Substring(0, 3)] + " to " + existingCurrencyNames[shortName.Substring(shortName.Length-4, 3)];
+            FullName = existingCurrencyNames[shortName.Substring(0, 3)] + " to " + existingCurrencyNames[shortName.Substring(shortName.Length-3, 3)];
         }
-        public bool IsEnabled { get; }
+
+        public bool IsEnabled { get; private set; } = true;
+        public void Disable()
+        {
+            IsEnabled = false;
+        }
 
         public decimal Average { get; private set; }
         public decimal Buy { get; private set; }

@@ -1,5 +1,7 @@
 ﻿using Logic.Model;
+using Logic.Model.ExistingCurrencies;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +23,15 @@ namespace Logic
             {
                 HttpResponseMessage response = await hc.GetAsync("https://btc-e.nz/api/3/info");
                 string responseString = await response.Content.ReadAsStringAsync();
-                List<ICurrencyPair> allPairs = new List<ICurrencyPair>();
-
-                var j = JsonConvert.DeserializeObject(responseString);
-                var t = j as IEnumerable<IEnumerable<IEnumerable<object>>>;
-                var b = t.Last().First();
-                List<string> names = new List<string>();
-                foreach (var item in b)
+                JObject rawData = JObject.Parse(responseString);
+                
+                var allPairsRawDict = rawData.Value<JObject>("pairs").Properties().ToDictionary(key => key.Name, value => value);
+                List<ICurrencyPair> allPairs = CurrencyRepository.ExistingCurrenciesList;
+                foreach (var pair in allPairsRawDict)
                 {
-                    //allPairs.Add(
-                        //new CurrencyPair(true, item.ToString().Split('"')[1]));
+                    
                 }
+
 
                 return null;
 
@@ -49,5 +49,6 @@ namespace Logic
             }
 
         }
+
     }
 }

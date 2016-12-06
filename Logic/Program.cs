@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
+using Logic.Model;
+using Logic.Model.ExistingCurrencies;
+using Logic.DTO;
 
 namespace Logic
 {
@@ -13,26 +17,21 @@ namespace Logic
         static void Main(string[] args)
         {
             Repository r = new Repository();
-            var a = r.R().Result;
-            var j = JsonConvert.DeserializeObject(a);
-            var t = j as IEnumerable<IEnumerable<IEnumerable<object>>>;
-            var b = t.Last().First();
-           
-            List<string> names = new List<string>();
-            foreach (var item in b)
+            string responseString = r.R().Result;
+
+            JObject rawData = JObject.Parse(responseString);
+
+            var allPairsRawDict = rawData.Value<JObject>("pairs").Properties().ToDictionary(key => key.Name, value => value.ToString());
+            List<ICurrencyPair> allPairs = CurrencyRepository.ExistingCurrenciesList;
+            var mdof = new Dictionary<string, PairResponse>();
+
+            foreach (var pair in allPairsRawDict)
             {
-                names.Add(item.ToString().Split('"')[1]);
-                foreach (var tite in item.ToString().Split('"'))
-                {
-                    if(!string.IsNullOrEmpty(tite)) Console.WriteLine(tite);
-                    Console.ReadKey();
-                }
-              
+                var alef = pair.Value.Substring(10);
+                mdof[pair.Key] = JsonConvert.DeserializeObject<PairResponse>(alef);
             }
-            
-            Console.WriteLine();
-            
-            
+
         }
+     
     }
 }
