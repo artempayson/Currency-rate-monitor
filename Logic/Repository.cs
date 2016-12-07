@@ -1,4 +1,5 @@
-﻿using Logic.Model;
+﻿using Logic.DTO;
+using Logic.Model;
 using Logic.Model.ExistingCurrencies;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -25,15 +26,19 @@ namespace Logic
                 string responseString = await response.Content.ReadAsStringAsync();
                 JObject rawData = JObject.Parse(responseString);
                 
-                var allPairsRawDict = rawData.Value<JObject>("pairs").Properties().ToDictionary(key => key.Name, value => value);
+                var allPairsRawDict = rawData.Value<JObject>("pairs").Properties().ToDictionary(key => key.Name, value => value.ToString());
                 List<ICurrencyPair> allPairs = CurrencyRepository.ExistingCurrenciesList;
+
                 foreach (var pair in allPairsRawDict)
                 {
-                    
+                    var rawPairItem = JsonConvert.DeserializeObject<CurrencyPairResponse>(pair.Value.Substring(10));
+                    var index = allPairs.FindIndex(curp => curp.ShortName.Equals(pair.Key));
+
+                    if(rawPairItem.Hidden == 1) allPairs[index].Disable();
                 }
 
 
-                return null;
+                return allPairs;
 
             }
 

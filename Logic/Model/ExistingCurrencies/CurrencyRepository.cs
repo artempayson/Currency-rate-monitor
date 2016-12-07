@@ -6,37 +6,16 @@ using System.Threading.Tasks;
 
 namespace Logic.Model.ExistingCurrencies
 {
-   static class CurrencyRepository
+    static class CurrencyRepository
     {
-       static public List<ICurrencyPair> ExistingCurrenciesList { get; } = new List<ICurrencyPair>()
+        static public List<ICurrencyPair> ExistingCurrenciesList
         {
-            new CurrencyPair("btc_usd"),
-            new CurrencyPair("btc_rur"),
-            new CurrencyPair("btc_eur"),
-            new CurrencyPair("ltc_btc"),
-            new CurrencyPair("ltc_usd"),
-            new CurrencyPair("ltc_rur"),
-            new CurrencyPair("ltc_eur"),
-            new CurrencyPair("nmc_btc"),
-            new CurrencyPair("nmc_usd"),
-            new CurrencyPair("nvc_btc"),
-            new CurrencyPair("nvc_usd"),
-            new CurrencyPair("usd_rur"),
-            new CurrencyPair("eur_usd"),
-            new CurrencyPair("eur_rur"),
-            new CurrencyPair("ppc_btc"),
-            new CurrencyPair("ppc_usd"),
-            new CurrencyPair("dsh_btc"),
-            new CurrencyPair("dsh_usd"),
-            new CurrencyPair("eth_btc"),
-            new CurrencyPair("eth_usd"),
-            new CurrencyPair("eth_eur"),
-            new CurrencyPair("eth_ltc"),
-            new CurrencyPair("eth_rur")
-        };
-       static public ICurrencyPair CurrencyPairByName(string name)
-        {
-            return ExistingCurrenciesList.Find(cp => cp.ShortName.Equals(name));
+            get
+            {
+                var res = new List<ICurrencyPair>();
+                CurrencyNames.existingCurrencyCodes.ForEach(code => res.Add(new CurrencyPair(code)));
+                return res;
+            }
         }
     }
 }
