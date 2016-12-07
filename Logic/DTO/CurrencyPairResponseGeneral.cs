@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Logic.DTO
 {
-    class CurrencyPairResponse
+    class CurrencyPairResponseGeneral
     {
         [JsonProperty(PropertyName = "hidden")]
         public byte Hidden { get; set; }

@@ -47,7 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\CurrencyPairResponse.cs" />
+    <Compile Include="DTO\CurrencyPairResponseGeneral.cs" />
+    <Compile Include="DTO\CurrencyPairResponseSpecific.cs" />
     <Compile Include="Model\ExistingCurrencies\CurrencyNames.cs" />
     <Compile Include="Model\ExistingCurrencies\CurrencyRepository.cs" />
     <Compile Include="Model\ExistingCurrencies\CurrencyPair.cs" />

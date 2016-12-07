@@ -18,8 +18,10 @@ namespace Logic
         {
             Repository r = new Repository();
             var beta = r.GetAllPairs();
-            var a = beta.Result;
+            var a = beta.Result[15];
+             r.UpdateSpecifiedPair(a);
+
         }
-     
+
     }
 }
