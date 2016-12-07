@@ -25,7 +25,7 @@ namespace Logic
                 HttpResponseMessage response = await hc.GetAsync("https://btc-e.nz/api/3/info");
                 string responseString = await response.Content.ReadAsStringAsync();
                 JObject rawData = JObject.Parse(responseString);
-                
+
                 var allPairsRawDict = rawData.Value<JObject>("pairs").Properties().ToDictionary(key => key.Name, value => value.ToString());
                 List<ICurrencyPair> allPairs = CurrencyRepository.ExistingCurrenciesList;
 
@@ -34,26 +34,14 @@ namespace Logic
                     var rawPairItem = JsonConvert.DeserializeObject<CurrencyPairResponse>(pair.Value.Substring(10));
                     var index = allPairs.FindIndex(curp => curp.ShortName.Equals(pair.Key));
 
-                    if(rawPairItem.Hidden == 1) allPairs[index].Disable();
+                    if (rawPairItem.Hidden == 1) allPairs[index].Disable();
                 }
-
-
                 return allPairs;
 
             }
 
         }
-        public async Task<string> R()
-        {
-            using (HttpClient hc = new HttpClient())
-            {
-                HttpResponseMessage response = await hc.GetAsync("https://btc-e.nz/api/3/info");
-                string responseString = await response.Content.ReadAsStringAsync();
-
-                return responseString;
-            }
-
-        }
+       
 
     }
 }
