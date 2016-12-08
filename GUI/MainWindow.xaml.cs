@@ -28,12 +28,14 @@ namespace GUI
     {
         static DispatcherTimer dispatcherTimer;
         Repository repository;
-        string[] axisXData;
-        decimal[] axisYData;
+        List<ICurrencyPair> list;
+        List<string> axisXData;
+        List<decimal> axisYData;
         public MainWindow()
         {
             InitializeComponent();
             repository = new Repository();
+           
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -44,20 +46,31 @@ namespace GUI
             Graph.Series.Add(new Series("CurrencyGraph"));
             Graph.Series[0].ChartArea = "PlaceForGraph";
             Graph.Series[0].ChartType = SeriesChartType.Line;
-            axisXData = new string[] { "a", "b", "c" };
-            axisYData = new decimal[] { 0.1m, 1.5m, 1.9m };
+
+            
+
+
+            axisXData = new List<string> { };
+            axisYData = new List<decimal> { };
 
 
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            var b = list[CurrencyChooseComboBox.SelectedIndex];
+            repository.UpdateSpecifiedPair(b);
+            axisXData.Add(DateTime.Now.ToString());
+            axisYData.Add(b.Average);
             Graph.Series[0].Points.DataBindXY(axisXData, axisYData);
+
             CommandManager.InvalidateRequerySuggested();
         }
 
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            list =await repository.GetAllPairs();
+
             SaveButton.IsEnabled = true;
             LoadButton.IsEnabled = true;
             CreditsButton.IsEnabled = true;
@@ -110,6 +123,8 @@ namespace GUI
             t.Font = new Font("Segoe UI", 15);
             Graph.Titles.Add(t);
 
+            axisXData.Clear();
+            axisYData.Clear();
         }
     }
 }
