@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic.Model
 {
-    interface ICurrencyPair
+    public interface ICurrencyPair
     {
         string ShortName { get; }
         void Disable();

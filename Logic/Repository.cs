@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    class Repository
+    public class Repository
     {
         const string GetAllPairsURL = "https://btc-e.nz/api/3/info";
         const string GetSpecifiedPairURL = "https://btc-e.nz/api/3/ticker/"; //after "/" pair[s] should be specified

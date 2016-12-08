@@ -3,35 +3,39 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         Title="Currency Exchange Rate Monior" Height="600" Width="800" ResizeMode="NoResize">
-    <Window.DataContext>
-        <local:GraphViewModel/>
-    </Window.DataContext>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*"/>
 
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.5*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <oxy:Plot Title="{Binding Title}" Grid.Column="1"  Grid.Row="1" Grid.RowSpan="3">
-            <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Points}"/>
-            </oxy:Plot.Series>
-        </oxy:Plot>
-        <Button Name="StartButton" FontSize="48" Grid.Column="0" Grid.Row="0" Content="Start"/> 
-        <Button Name="SaveButton" FontSize="48" Grid.Column="0" Grid.Row="1" Content="Save"/>
-        <Button Name="LoadButton" FontSize="48" Grid.Column="0" Grid.Row="2" Content="Load"/>
-        <Button Name="Credits" FontSize="48" Grid.Column="0" Grid.Row="3" Content="Credits"/>
-        <ComboBox Name="CurrencyChooseComboBox" Grid.Column="1" Grid.Row="0"/>
 
+
+        <Button Name="StartButton" FontSize="48" Grid.Column="0" Grid.Row="0" Content="Start" Click="StartButton_Click" Grid.RowSpan="2"/>
+        <Button Name="SaveButton" FontSize="48" Grid.Column="0" Grid.Row="2" Content="Save" IsEnabled="False" VerticalAlignment="Center"/>
+        <Button Name="LoadButton" FontSize="48" Grid.Column="0" Grid.Row="3" Content="Load" IsEnabled="False" VerticalAlignment="Center"/>
+        <Button Name="CreditsButton" FontSize="48" Grid.Column="0" Grid.Row="4" Content="Credits" IsEnabled="False" Grid.RowSpan="1" VerticalAlignment="Center"/>
+        <Button Name="ExitButton" Grid.Row="5" FontSize="48" Click="ExitButton_Click">Exit</Button>
+        <ComboBox Name="CurrencyChooseComboBox" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" IsEnabled="False" SelectedIndex="0" DisplayMemberPath="ShortName" FontSize="16" SelectionChanged="CurrencyChooseComboBox_SelectionChanged"/>
+        <StackPanel Name="CurrencyNameChoosePanel" Grid.Column="1" Visibility="Hidden">
+            <RadioButton Name ="RadioButtonSN" GroupName="CurrencyName" Content="Short currency pair name" FontSize="14" IsChecked="True" Checked="RadioButton_Checked_1"/>
+            <RadioButton GroupName="CurrencyName" Content="Full currency pair name" FontSize="14" Checked="RadioButton_Checked" />
+        </StackPanel>
+        <WindowsFormsHost Background="White" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="4"></WindowsFormsHost>
     </Grid>
 </Window>
