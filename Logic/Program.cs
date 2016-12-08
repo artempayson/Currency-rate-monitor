@@ -14,12 +14,13 @@ namespace Logic
 {
     class Program
     {
-        static  void Main(string[] args)
+        static void Main(string[] args)
         {
             Repository r = new Repository();
+            double ssa = 0.12;
             var beta = r.GetAllPairs();
             var a = beta.Result[15];
-             r.UpdateSpecifiedPair(a);
+            r.UpdateSpecifiedPair(a);
 
         }
 

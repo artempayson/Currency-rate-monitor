@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
 namespace Logic.DTO
 {
     class CurrencyPairResponseSpecific
     {
-            public decimal High { get; set; }
-            public decimal Low { get; set; }
-            public decimal Avg { get; set; }
-            public decimal Vol { get; set; }
-            public decimal Vol_cur { get; set; }
-            public decimal Last { get; set; }
-            public decimal Buy { get; set; }
-            public decimal Sell { get; set; }
+            public double High { get; set; }
+            public double Low { get; set; }
+            public double Avg { get; set; }
+            public double Vol { get; set; }
+            public double Vol_cur { get; set; }
+            public double Last { get; set; }
+            public double Buy { get; set; }
+            public double Sell { get; set; }
             public long Updated { get; set; }
         }
     

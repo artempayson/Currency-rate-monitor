@@ -44,8 +44,8 @@ namespace Logic
             {
                 HttpResponseMessage response =  hc.GetAsync(string.Format("{0}{1}", GetSpecifiedPairURL, chosenPair.ShortName)).Result;
                 string responseString =  response.Content.ReadAsStringAsync().Result;
-                var rawItem = JsonConvert.DeserializeObject<CurrencyPairResponseSpecific>(responseString);
-                chosenPair.UpdateValues(rawItem.Avg, rawItem.Buy, rawItem.Sell, rawItem.High, rawItem.Low);
+                var rawItem = JsonConvert.DeserializeObject<CurrencyPairResponseSpecific>(responseString.Substring(11, responseString.Length - 12));
+                chosenPair.UpdateValues(new decimal(rawItem.Avg), new decimal(rawItem.Buy), new decimal(rawItem.Sell), new decimal(rawItem.High), new decimal(rawItem.Low));
             }
            
         }
