@@ -17,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+
 namespace GUI
 {
     /// <summary>
@@ -24,7 +26,7 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        static Timer timer;
+        static DispatcherTimer dispatcherTimer;
         Repository repository;
         string[] axisXData;
         decimal[] axisYData;
@@ -32,8 +34,11 @@ namespace GUI
         {
             InitializeComponent();
             repository = new Repository();
-            timer = new Timer(3000);
-            timer.Elapsed += UpdateGraph;
+
+            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
+
 
             Graph.ChartAreas.Add(new ChartArea("PlaceForGraph"));
             Graph.Series.Add(new Series("CurrencyGraph"));
@@ -44,11 +49,12 @@ namespace GUI
 
 
         }
-
-        private void UpdateGraph(object sender, ElapsedEventArgs e)
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             Graph.Series[0].Points.DataBindXY(axisXData, axisYData);
+            CommandManager.InvalidateRequerySuggested();
         }
+
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -58,7 +64,9 @@ namespace GUI
 
             CurrencyChooseComboBox.ItemsSource = await repository.GetAllPairs();
             CurrencyNameChoosePanel.Visibility = Visibility.Visible;
-            timer.Enabled = true;
+
+            dispatcherTimer.Start();
+
             CurrencyChooseComboBox.IsEnabled = true;
             StartButton.IsEnabled = false;
 
