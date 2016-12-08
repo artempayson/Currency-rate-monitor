@@ -36,7 +36,7 @@ namespace GUI
         {
             InitializeComponent();
             repository = new Repository();
-           
+
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -47,8 +47,8 @@ namespace GUI
             Graph.Series.Add(new Series("CurrencyGraph"));
             Graph.Series[0].ChartArea = "PlaceForGraph";
             Graph.Series[0].ChartType = SeriesChartType.Line;
-            
-            
+
+
 
 
             axisXData = new List<string> { };
@@ -72,7 +72,7 @@ namespace GUI
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            list =await repository.GetAllPairs();
+            list = await repository.GetAllPairs();
 
             SaveButton.IsEnabled = true;
             LoadButton.IsEnabled = true;
@@ -133,11 +133,22 @@ namespace GUI
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "JSON files (*.json)|*.json";
             if (openFile.ShowDialog() == true)
             {
-                string json = openFile.FileName;
+                string openPath = openFile.FileName;
             }
-                
+
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "JSON files (*.json)|*.json";
+            if (saveFile.ShowDialog() == true)
+            {
+                string savePath = saveFile.FileName;
+            }
         }
     }
 }
