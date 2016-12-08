@@ -14,7 +14,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
 
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -28,16 +29,16 @@
 
 
         <Button Name="StartButton" FontSize="48" Grid.Column="0" Grid.Row="0" Content="Start" Click="StartButton_Click" Grid.RowSpan="2"/>
-        <Button Name="SaveButton" FontSize="48" Grid.Column="0" Grid.Row="2" Content="Save" IsEnabled="False" VerticalAlignment="Center"/>
-        <Button Name="LoadButton" FontSize="48" Grid.Column="0" Grid.Row="3" Content="Load" IsEnabled="False" VerticalAlignment="Center"/>
-        <Button Name="CreditsButton" FontSize="48" Grid.Column="0" Grid.Row="4" Content="Credits" IsEnabled="False" Grid.RowSpan="1" VerticalAlignment="Center"/>
+        <Button Name="SaveButton" FontSize="48" Grid.Column="0" Grid.Row="2" Content="Save" IsEnabled="False" VerticalAlignment="Center" Margin="0,23"/>
+        <Button Name="LoadButton" FontSize="48" Grid.Column="0" Grid.Row="3" Content="Load" IsEnabled="False" VerticalAlignment="Center" Margin="0,23" Click="LoadButton_Click"/>
+        <Button Name="CreditsButton" FontSize="48" Grid.Column="0" Grid.Row="4" Content="Credits" IsEnabled="False" Grid.RowSpan="1" VerticalAlignment="Center" Margin="0,23"/>
         <Button Name="ExitButton" Grid.Row="5" FontSize="48" Click="ExitButton_Click">Exit</Button>
-        <ComboBox Name="CurrencyChooseComboBox" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" IsEnabled="False" SelectedIndex="0" DisplayMemberPath="ShortName" FontSize="16" SelectionChanged="CurrencyChooseComboBox_SelectionChanged"/>
+        <ComboBox Name="CurrencyChooseComboBox" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" IsEnabled="False" SelectedIndex="0" DisplayMemberPath="ShortName" FontSize="16" SelectionChanged="CurrencyChooseComboBox_SelectionChanged"/>
         <StackPanel Name="CurrencyNameChoosePanel" Grid.Column="1" Visibility="Hidden">
             <RadioButton Name ="RadioButtonSN" GroupName="CurrencyName" Content="Short currency pair name" FontSize="14" IsChecked="True" Checked="RadioButton_Checked_1"/>
             <RadioButton GroupName="CurrencyName" Content="Full currency pair name" FontSize="14" Checked="RadioButton_Checked" />
         </StackPanel>
-        <WindowsFormsHost  Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="4">
+        <WindowsFormsHost  Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="4">
             <dvc:Chart x:Name="Graph"/>
         </WindowsFormsHost>
     </Grid>

@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace GUI
 {
@@ -46,7 +47,7 @@ namespace GUI
             Graph.Series.Add(new Series("CurrencyGraph"));
             Graph.Series[0].ChartArea = "PlaceForGraph";
             Graph.Series[0].ChartType = SeriesChartType.Line;
-
+            
             
 
 
@@ -60,7 +61,9 @@ namespace GUI
             var b = list[CurrencyChooseComboBox.SelectedIndex];
             repository.UpdateSpecifiedPair(b);
             axisXData.Add(DateTime.Now.ToString());
-            axisYData.Add(b.Average);
+            axisYData.Add(b.Sell);
+            Graph.ChartAreas[0].AxisY.Maximum = (double)b.High;
+            Graph.ChartAreas[0].AxisY.Minimum = (double)b.Low;
             Graph.Series[0].Points.DataBindXY(axisXData, axisYData);
 
             CommandManager.InvalidateRequerySuggested();
@@ -125,6 +128,16 @@ namespace GUI
 
             axisXData.Clear();
             axisYData.Clear();
+        }
+
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            if (openFile.ShowDialog() == true)
+            {
+                string json = openFile.FileName;
+            }
+                
         }
     }
 }
