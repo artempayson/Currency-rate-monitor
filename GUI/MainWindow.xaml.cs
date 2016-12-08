@@ -29,9 +29,10 @@ namespace GUI
     {
         static DispatcherTimer dispatcherTimer;
         Repository repository;
-        List<ICurrencyPair> list;
+        List<ICurrencyPair> allCurrencyPairs;
         List<string> axisXData;
-        List<decimal> axisYData;
+        List<decimal> axisSellData;
+        List<decimal> axisBuyData;
         public MainWindow()
         {
             InitializeComponent();
@@ -44,35 +45,45 @@ namespace GUI
 
 
             Graph.ChartAreas.Add(new ChartArea("PlaceForGraph"));
-            Graph.Series.Add(new Series("CurrencyGraph"));
-            Graph.Series[0].ChartArea = "PlaceForGraph";
-            Graph.Series[0].ChartType = SeriesChartType.Line;
+            Graph.Series.Add(new Series("SellGraph"));
+            Graph.Series.Add(new Series("BuyGraph"));
 
+            Graph.Series["SellGraph"].ChartArea = "PlaceForGraph";
+            Graph.Series["SellGraph"].ChartType = SeriesChartType.Line;
+            Graph.Series["BuyGraph"].ChartArea = "PlaceForGraph";
+            Graph.Series["BuyGraph"].ChartType = SeriesChartType.Line;
 
+            axisXData = new List<string>();
+            axisSellData = new List<decimal>();
+            axisBuyData = new List<decimal>();
 
+            Graph.Legends.Add(new Legend("Legend2"));
 
-            axisXData = new List<string> { };
-            axisYData = new List<decimal> { };
-
+            Graph.Legends["Legend2"].DockedToChartArea = "PlaceForGraph";
+            Graph.Series[0].Legend = "Legend2";
+            Graph.Series[0].IsVisibleInLegend = true;
 
         }
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            var b = list[CurrencyChooseComboBox.SelectedIndex];
-            repository.UpdateSpecifiedPair(b);
+            var point = allCurrencyPairs[CurrencyChooseComboBox.SelectedIndex];
+            repository.UpdateSpecifiedPair(point);
             axisXData.Add(DateTime.Now.ToString());
-            axisYData.Add(b.Sell);
-            Graph.ChartAreas[0].AxisY.Maximum = (double)b.High;
-            Graph.ChartAreas[0].AxisY.Minimum = (double)b.Low;
-            Graph.Series[0].Points.DataBindXY(axisXData, axisYData);
+            axisSellData.Add(point.Sell);
+            axisBuyData.Add(point.Buy);
+            Graph.ChartAreas[0].AxisY.Maximum = (double)point.High;
+            Graph.ChartAreas[0].AxisY.Minimum = (double)point.Low;
 
+            Graph.Series[0].Points.DataBindXY(axisXData, axisSellData);
+            Graph.Series[1].Points.DataBindXY(axisXData, axisBuyData);
+            
             CommandManager.InvalidateRequerySuggested();
         }
 
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            list = await repository.GetAllPairs();
+            allCurrencyPairs = await repository.GetAllPairs();
 
             SaveButton.IsEnabled = true;
             LoadButton.IsEnabled = true;
@@ -127,7 +138,7 @@ namespace GUI
             Graph.Titles.Add(t);
 
             axisXData.Clear();
-            axisYData.Clear();
+            axisSellData.Clear();
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
