@@ -57,10 +57,10 @@ namespace GUI
             axisSellData = new List<decimal>();
             axisBuyData = new List<decimal>();
 
-            Graph.Legends.Add(new Legend("Legend2"));
+            Graph.Legends.Add(new Legend("Legend"));
 
-            Graph.Legends["Legend2"].DockedToChartArea = "PlaceForGraph";
-            Graph.Series[0].Legend = "Legend2";
+            Graph.Legends["Legend"].DockedToChartArea = "PlaceForGraph";
+            Graph.Series[0].Legend = "Legend";
             Graph.Series[0].IsVisibleInLegend = true;
 
         }
@@ -76,7 +76,7 @@ namespace GUI
 
             Graph.Series[0].Points.DataBindXY(axisXData, axisSellData);
             Graph.Series[1].Points.DataBindXY(axisXData, axisBuyData);
-            
+
             CommandManager.InvalidateRequerySuggested();
         }
 
@@ -133,11 +133,14 @@ namespace GUI
         {
             ICurrencyPair temp = (ICurrencyPair)CurrencyChooseComboBox.SelectedItem;
             Graph.Titles.Clear();
-            Title t = new Title(RadioButtonSN.IsChecked.Value ? temp.ShortName : temp.FullName);
-            t.Font = new Font("Segoe UI", 15);
-            Graph.Titles.Add(t);
-
+            if (temp != null)
+            {
+                Title t = new Title(RadioButtonSN.IsChecked.Value ? temp.ShortName : temp.FullName);
+                t.Font = new Font("Segoe UI", 15);
+                Graph.Titles.Add(t);
+            }
             axisXData.Clear();
+            axisBuyData.Clear();
             axisSellData.Clear();
         }
 
