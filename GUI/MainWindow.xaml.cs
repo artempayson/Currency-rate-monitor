@@ -19,6 +19,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace GUI
 {
@@ -85,9 +87,7 @@ namespace GUI
         {
             allCurrencyPairs = await repository.GetAllPairs();
 
-            SaveButton.IsEnabled = true;
-            LoadButton.IsEnabled = true;
-            CreditsButton.IsEnabled = true;
+
 
             CurrencyChooseComboBox.ItemsSource = await repository.GetAllPairs();
             CurrencyNameChoosePanel.Visibility = Visibility.Visible;
@@ -96,6 +96,9 @@ namespace GUI
 
             CurrencyChooseComboBox.IsEnabled = true;
             StartButton.IsEnabled = false;
+            SaveButton.IsEnabled = true;
+            LoadButton.IsEnabled = true;
+            CreditsButton.IsEnabled = true;
 
         }
 
@@ -151,17 +154,41 @@ namespace GUI
             if (openFile.ShowDialog() == true)
             {
                 string openPath = openFile.FileName;
+                string jsonLoad = File.ReadAllText(openPath);
+                var RawData = JsonConvert.DeserializeObject<StatisticData>(jsonLoad);
+                CurrencyChooseComboBox.SelectedIndex = RawData.CurrencyPairID;
+                axisXData.InsertRange(0, RawData.axisXData);
+                axisSellData.InsertRange(0, RawData.axisSellData);
+                axisBuyData.InsertRange(0, RawData.axisBuyData);
             }
 
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Filter = "JSON files (*.json)|*.json";
-            if (saveFile.ShowDialog() == true)
+            try
             {
-                string savePath = saveFile.FileName;
+                SaveFileDialog saveFile = new SaveFileDialog();
+                saveFile.Filter = "JSON files (*.json)|*.json";
+                if (saveFile.ShowDialog() == true)
+                {
+                    string savePath = saveFile.FileName;
+                    string jsonSave = JsonConvert.SerializeObject(
+                        new StatisticData
+                        (
+                            CurrencyChooseComboBox.SelectedIndex,
+                            ((ICurrencyPair)CurrencyChooseComboBox.SelectedItem).ShortName,
+                            axisXData,
+                            axisSellData,
+                            axisBuyData
+                        ));
+                    File.WriteAllText(savePath, jsonSave);
+                    MessageBox.Show("Your file is at " + savePath, "Cохранение увенчалось успехом");
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Error during saving");
             }
         }
     }
