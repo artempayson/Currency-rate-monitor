@@ -21,7 +21,9 @@ namespace Logic
             var beta = r.GetAllPairs();
             var a = beta.Result[15];
             r.UpdateSpecifiedPair(a);
-
+            List<CurrencyPair> aaaaaa = new List<CurrencyPair> { new CurrencyPair("btc_usd"), new CurrencyPair("btc_rur") };
+           var b = aaaaaa.ToDictionary(key => key.FullName, value => value);
+            var slss = 42;
         }
 
     }

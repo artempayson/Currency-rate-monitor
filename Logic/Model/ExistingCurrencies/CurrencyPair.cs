@@ -34,7 +34,7 @@ namespace Logic.Model.ExistingCurrencies
         public decimal Sell { get; private set; }
         public decimal High { get; private set; }
         public decimal Low { get; private set; }
-        public decimal Last { get; set; }
+        public decimal Last { get; private set; }
 
         public void UpdateValues(decimal average, decimal last, decimal buy, decimal sell, decimal high, decimal low)
         {

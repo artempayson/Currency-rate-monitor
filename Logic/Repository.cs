@@ -25,7 +25,6 @@ namespace Logic
                 HttpResponseMessage response = await hc.GetAsync(GetAllPairsURL);
                 string responseString = await response.Content.ReadAsStringAsync();
                 JObject rawData = JObject.Parse(responseString);
-
                 var allPairsRawDict = rawData.Value<JObject>("pairs").Properties().ToDictionary(key => key.Name, value => value.ToString());
                 List<ICurrencyPair> allPairs = CurrencyRepository.ExistingCurrenciesList;
 
