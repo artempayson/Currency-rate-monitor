@@ -67,31 +67,33 @@ namespace GUI
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            var point = allCurrencyPairs[CurrencyChooseComboBox.SelectedIndex];
-            repository.UpdateSpecifiedPair(point);
+            if (allCurrencyPairs == null) return;
+            
+                var point = allCurrencyPairs[CurrencyChooseComboBox.SelectedIndex];
+                repository.UpdateSpecifiedPair(point);
 
-            Graph.ChartAreas[0].AxisX.MajorGrid.Enabled = HorizontalLinesCheckBox.IsChecked.Value;
-            Graph.ChartAreas[0].AxisY.MajorGrid.Enabled = VerticalLinesCheckBox.IsChecked.Value;
+                Graph.ChartAreas[0].AxisX.MajorGrid.Enabled = HorizontalLinesCheckBox.IsChecked.Value;
+                Graph.ChartAreas[0].AxisY.MajorGrid.Enabled = VerticalLinesCheckBox.IsChecked.Value;
 
-            axisXData.Add(DateTime.Now.ToString());
-            axisSellData.Add(point.Sell);
-            axisBuyData.Add(point.Buy);
+                axisXData.Add(DateTime.Now.ToString());
+                axisSellData.Add(point.Sell);
+                axisBuyData.Add(point.Buy);
 
-            Graph.ChartAreas[0].AxisY.Maximum = (double)point.High;
-            Graph.ChartAreas[0].AxisY.Minimum = (double)point.Low;
+                Graph.ChartAreas[0].AxisY.Maximum = (double)point.High;
+                Graph.ChartAreas[0].AxisY.Minimum = (double)point.Low;
 
-            Graph.Series[0].Points.DataBindXY(axisXData, axisSellData);
-            Graph.Series[1].Points.DataBindXY(axisXData, axisBuyData);
+                Graph.Series[0].Points.DataBindXY(axisXData, axisSellData);
+                Graph.Series[1].Points.DataBindXY(axisXData, axisBuyData);
 
-            if (decimal.Parse(SellPriceLabel.Content.ToString()) > point.Sell)
-                SellPriceLabel.Foreground = System.Windows.Media.Brushes.MediumVioletRed;
-            else SellPriceLabel.Foreground = System.Windows.Media.Brushes.LightGreen;
-            if (decimal.Parse(BuyPriceLabel.Content.ToString()) > point.Buy)
-                BuyPriceLabel.Foreground = System.Windows.Media.Brushes.MediumVioletRed;
-            else BuyPriceLabel.Foreground = System.Windows.Media.Brushes.LightGreen;
-            SellPriceLabel.Content = point.Sell;
-            BuyPriceLabel.Content = point.Buy;
-
+                if (decimal.Parse(SellPriceLabel.Content.ToString()) > point.Sell)
+                    SellPriceLabel.Foreground = System.Windows.Media.Brushes.MediumVioletRed;
+                else SellPriceLabel.Foreground = System.Windows.Media.Brushes.LightGreen;
+                if (decimal.Parse(BuyPriceLabel.Content.ToString()) > point.Buy)
+                    BuyPriceLabel.Foreground = System.Windows.Media.Brushes.MediumVioletRed;
+                else BuyPriceLabel.Foreground = System.Windows.Media.Brushes.LightGreen;
+                SellPriceLabel.Content = point.Sell;
+                BuyPriceLabel.Content = point.Buy;
+            
             CommandManager.InvalidateRequerySuggested();
         }
 

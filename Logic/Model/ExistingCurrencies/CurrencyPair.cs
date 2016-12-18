@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 namespace Logic.Model.ExistingCurrencies
 {
 
-
-
-
-
     class CurrencyPair : ICurrencyPair
     {
         
