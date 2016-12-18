@@ -98,8 +98,16 @@ namespace GUI
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            allCurrencyPairs = await repository.GetAllPairs();
-
+            try
+            {
+                allCurrencyPairs = await repository.GetAllPairs();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Exception during connection attempt. Application will be closed soon. We are terribly sorry. Goodbye", "Critical error",MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
+            }
+            
             CurrencyChooseComboBox.ItemsSource = allCurrencyPairs;
             CurrencyNameChoosePanel.Visibility = Visibility.Visible;
 
@@ -123,7 +131,7 @@ namespace GUI
             CurrencyChooseComboBox.DisplayMemberPath = "FullName";
             if (CurrencyChooseComboBox.SelectedItem != null)
             {
-                Graph.Titles.Clear();
+                Graph.Titles.Clear();                
                 Title t = new Title(((ICurrencyPair)CurrencyChooseComboBox.SelectedItem).FullName);
                 t.Font = new Font("Segoe UI", 15);
                 Graph.Titles.Add(t);
