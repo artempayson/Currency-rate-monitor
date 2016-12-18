@@ -35,18 +35,18 @@ namespace GUI
         List<string> axisXData;
         List<decimal> axisSellData;
         List<decimal> axisBuyData;
+
         public MainWindow()
         {
             InitializeComponent();
             repository = new Repository();
 
-
-            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
-
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
 
             Graph.ChartAreas.Add(new ChartArea("PlaceForGraph"));
+
             Graph.Series.Add(new Series("SellGraph"));
             Graph.Series.Add(new Series("BuyGraph"));
 
@@ -63,21 +63,34 @@ namespace GUI
 
             Graph.Legends["Legend"].DockedToChartArea = "PlaceForGraph";
             Graph.Series[0].Legend = "Legend";
-            Graph.Series[0].IsVisibleInLegend = true;
-
         }
+
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             var point = allCurrencyPairs[CurrencyChooseComboBox.SelectedIndex];
             repository.UpdateSpecifiedPair(point);
+
+            Graph.ChartAreas[0].AxisX.MajorGrid.Enabled = HorizontalLinesCheckBox.IsChecked.Value;
+            Graph.ChartAreas[0].AxisY.MajorGrid.Enabled = VerticalLinesCheckBox.IsChecked.Value;
+
             axisXData.Add(DateTime.Now.ToString());
             axisSellData.Add(point.Sell);
             axisBuyData.Add(point.Buy);
+
             Graph.ChartAreas[0].AxisY.Maximum = (double)point.High;
             Graph.ChartAreas[0].AxisY.Minimum = (double)point.Low;
 
             Graph.Series[0].Points.DataBindXY(axisXData, axisSellData);
             Graph.Series[1].Points.DataBindXY(axisXData, axisBuyData);
+
+            if (decimal.Parse(SellPriceLabel.Content.ToString()) > point.Sell)
+                SellPriceLabel.Foreground = System.Windows.Media.Brushes.MediumVioletRed;
+            else SellPriceLabel.Foreground = System.Windows.Media.Brushes.LightGreen;
+            if (decimal.Parse(BuyPriceLabel.Content.ToString()) > point.Buy)
+                BuyPriceLabel.Foreground = System.Windows.Media.Brushes.MediumVioletRed;
+            else BuyPriceLabel.Foreground = System.Windows.Media.Brushes.LightGreen;
+            SellPriceLabel.Content = point.Sell;
+            BuyPriceLabel.Content = point.Buy;
 
             CommandManager.InvalidateRequerySuggested();
         }
@@ -87,9 +100,7 @@ namespace GUI
         {
             allCurrencyPairs = await repository.GetAllPairs();
 
-
-
-            CurrencyChooseComboBox.ItemsSource = await repository.GetAllPairs();
+            CurrencyChooseComboBox.ItemsSource = allCurrencyPairs;
             CurrencyNameChoosePanel.Visibility = Visibility.Visible;
 
             dispatcherTimer.Start();
@@ -98,7 +109,12 @@ namespace GUI
             StartButton.IsEnabled = false;
             SaveButton.IsEnabled = true;
             LoadButton.IsEnabled = true;
-            CreditsButton.IsEnabled = true;
+
+            BuyTitleLabel.Visibility = Visibility.Visible;
+            SellTitleLabel.Visibility = Visibility.Visible;
+
+            HorizontalLinesCheckBox.Visibility = Visibility.Visible;
+            VerticalLinesCheckBox.Visibility = Visibility.Visible;
 
         }
 
@@ -128,7 +144,6 @@ namespace GUI
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-
             Close();
         }
 
@@ -149,17 +164,25 @@ namespace GUI
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFile = new OpenFileDialog();
-            openFile.Filter = "JSON files (*.json)|*.json";
-            if (openFile.ShowDialog() == true)
+            try
             {
-                string openPath = openFile.FileName;
-                string jsonLoad = File.ReadAllText(openPath);
-                var RawData = JsonConvert.DeserializeObject<StatisticData>(jsonLoad);
-                CurrencyChooseComboBox.SelectedIndex = RawData.CurrencyPairID;
-                axisXData.InsertRange(0, RawData.axisXData);
-                axisSellData.InsertRange(0, RawData.axisSellData);
-                axisBuyData.InsertRange(0, RawData.axisBuyData);
+                OpenFileDialog openFile = new OpenFileDialog();
+                openFile.Filter = "JSON files (*.json)|*.json";
+                if (openFile.ShowDialog() == true)
+                {
+                    string openPath = openFile.FileName;
+                    string jsonLoad = File.ReadAllText(openPath);
+                    var RawData = JsonConvert.DeserializeObject<StatisticData>(jsonLoad);
+                    CurrencyChooseComboBox.SelectedIndex = RawData.CurrencyPairID;
+                    axisXData.InsertRange(0, RawData.axisXData);
+                    axisSellData.InsertRange(0, RawData.axisSellData);
+                    axisBuyData.InsertRange(0, RawData.axisBuyData);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error during loading");
             }
 
         }
@@ -191,5 +214,11 @@ namespace GUI
                 MessageBox.Show(exception.Message, "Error during saving");
             }
         }
+
+        private void CreditsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Made by Artem Payson and Ekaterina Fofina", "Credits", MessageBoxButton.YesNoCancel);
+        }
+
     }
 }

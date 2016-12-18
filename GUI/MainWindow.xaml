@@ -8,15 +8,15 @@
         xmlns:local="clr-namespace:GUI"
         xmlns:dvc="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         mc:Ignorable="d"
-        Title="Currency Exchange Rate Monior" Height="600" Width="800" ResizeMode="NoResize">
+        Title="Currency Exchange Rate Monitor" Height="600" Width="800" ResizeMode="NoResize">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*" />
@@ -26,19 +26,27 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-
-
-        <Button Name="StartButton" FontSize="48" Grid.Column="0" Grid.Row="0" Content="Start" Click="StartButton_Click" Grid.RowSpan="2"/>
-        <Button Name="SaveButton" FontSize="48" Grid.Column="0" Grid.Row="2" Content="Save" IsEnabled="False" VerticalAlignment="Center" Margin="0,23" Click="SaveButton_Click"/>
-        <Button Name="LoadButton" FontSize="48" Grid.Column="0" Grid.Row="3" Content="Load" IsEnabled="False" VerticalAlignment="Center" Margin="0,23" Click="LoadButton_Click"/>
-        <Button Name="CreditsButton" FontSize="48" Grid.Column="0" Grid.Row="4" Content="Credits" IsEnabled="False" Grid.RowSpan="1" VerticalAlignment="Center" Margin="0,23"/>
+        <Button Name="StartButton"  FontSize="48" Grid.Column="0" Grid.Row="0" Content="Start" Click="StartButton_Click" Grid.RowSpan="2"/>
+        <Button Name="SaveButton" FontSize="48" Grid.Column="0" Grid.Row="2" Content="Save" IsEnabled="False" VerticalAlignment="Center" Click="SaveButton_Click" Margin="0,23"/>
+        <Button Name="LoadButton" FontSize="48" Grid.Column="0" Grid.Row="3" Content="Load" IsEnabled="False" VerticalAlignment="Center"  Click="LoadButton_Click" Margin="0,23"/>
+        <Button Name="CreditsButton" FontSize="48" Grid.Column="0" Grid.Row="4" Content="Credits" Grid.RowSpan="1" VerticalAlignment="Center" Margin="0,23" Click="CreditsButton_Click"/>
         <Button Name="ExitButton" Grid.Row="5" FontSize="48" Click="ExitButton_Click">Exit</Button>
-        <ComboBox Name="CurrencyChooseComboBox" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" IsEnabled="False" SelectedIndex="0" DisplayMemberPath="ShortName" FontSize="16" SelectionChanged="CurrencyChooseComboBox_SelectionChanged"/>
+        <ComboBox Name="CurrencyChooseComboBox" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" IsEnabled="False" SelectedIndex="0" DisplayMemberPath="ShortName" FontSize="16" SelectionChanged="CurrencyChooseComboBox_SelectionChanged"/>
         <StackPanel Name="CurrencyNameChoosePanel" Grid.Column="1" Visibility="Hidden">
             <RadioButton Name ="RadioButtonSN" GroupName="CurrencyName" Content="Short currency pair name" FontSize="14" IsChecked="True" Checked="RadioButton_Checked_1"/>
             <RadioButton GroupName="CurrencyName" Content="Full currency pair name" FontSize="14" Checked="RadioButton_Checked" />
         </StackPanel>
-        <WindowsFormsHost  Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="4">
+
+        <Label x:Name = "BuyTitleLabel" Grid.Column="3" FontSize="15" Visibility="Hidden">Buy price:</Label>
+        <Label x:Name="BuyPriceLabel" Grid.Column="3" Grid.Row="0" FontSize="15"  Foreground ="White" VerticalAlignment="Bottom">0</Label>
+        <Label x:Name = "SellTitleLabel" Grid.Column="4" FontSize="15" Visibility="Hidden" Grid.Row="0" >Sell price:</Label>
+        <Label x:Name="SellPriceLabel" Grid.Column="4" Grid.Row="0" FontSize="15" Foreground ="White" VerticalAlignment="Bottom">0</Label>
+        <StackPanel Grid.Column="2">
+            <CheckBox x:Name="HorizontalLinesCheckBox" Visibility="Hidden"  FontSize="15">Show X grid-lines</CheckBox>
+        <CheckBox x:Name="VerticalLinesCheckBox" FontSize="15" Visibility="Hidden">Show Y grid-lines</CheckBox>
+        </StackPanel>
+        
+        <WindowsFormsHost  Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="2" Grid.RowSpan="4">
             <dvc:Chart x:Name="Graph"/>
         </WindowsFormsHost>
     </Grid>
